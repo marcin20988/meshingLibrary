@@ -37,7 +37,6 @@ std::string element::write()
 
 void element::labelArcs(const point *pList, const int pListLength)
 {
-    std::cout << "number of arcs in this element: " << nrOfArcs_ << std::endl;
     for(int i=0; i< nrOfArcs_; i++)
     {
         arcList_[i].label(pList, pListLength);

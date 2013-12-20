@@ -104,7 +104,6 @@ void arc::label(const point *pList,const int pListLength)
         if( p2_ == currentPoint ) l2 = i;
     }
 
-    std::cout << "test l1=" << l1 << ", l2=" << l2 << std::endl;
     pointLabel1_ = l1;
     pointLabel2_ = l2;
 };

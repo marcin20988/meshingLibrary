@@ -39,7 +39,7 @@ void mesh::addElement(element& target){
 void mesh::write()
 {
 
-    std::cout << "labeling arcs" << std::endl;
+    std::cout << "Labeling arcs \n" << std::endl;
     for(int i=0; i < numberOfElements_; i++){
         elementList_[i].labelArcs(verticesList_,numberOfVertices_);
     }
@@ -48,13 +48,15 @@ void mesh::write()
     for(int i=0; i < numberOfElements_; i++){
         arcCount += elementList_[i].addArcsToList(arcList_, numberOfArcs_);
     }
-    std::cout << "added " << arcCount << " arcs\n";
+    std::cout << "added " << arcCount << " arcs\n\n";
 
-    std::cout << "Writing blockMeshDict" << std::endl;
-    std::cout << "number of elements in the mesh: " << numberOfElements_ << std::endl;
+    std::cout << "Writing blockMeshDict:" << std::endl;
+    std::cout << "number of elements in the mesh:" << numberOfElements_ << std::endl;
+    std::cout << "\n{\n ";
     for(int i=0; i<numberOfElements_;  i++){
         std::cout << elementList_[i].name() << std::endl;
     }
+    std::cout << "}\n\n";
     
     //-----------write header lines
     blockMeshFile_ << header();
