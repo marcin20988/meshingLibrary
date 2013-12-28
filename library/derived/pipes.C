@@ -18,6 +18,7 @@ multiElement(5,name)
     double r = 2.0 / sqrt(2.0) * squareRadious * radious;
     double a = 2.0 / sqrt(2.0) * squareSize * radious;
 
+
     elements_[0] = 
         new cylinder
         (
@@ -37,7 +38,7 @@ multiElement(5,name)
                 alpha1,
                 alpha2,
                 initialZ,
-                initialZ + length
+                length
             );
         //elements_[i+1] = new element;
     }
@@ -58,6 +59,7 @@ ring::ring
 ):
 multiElement(numberOfSegments,name)
 {
+    nSegments_ = numberOfSegments;
 
     for(int i=0; i<numberOfSegments; i++){
         float alpha1 = deltaAlpha + i * 2.0 * M_PI / numberOfSegments;
@@ -94,17 +96,23 @@ restrictedPipe::restrictedPipe
     rounding rnd,
     std::string name
 ):
-multiElement(3,name)
+multiElement(5,name)
 {
+    l_ = length;
+    r_ = radious;
+    R_ = pipeRadious;
+    z1_ = restrictionLocation;
+    z2_ = restrictionLength;
+
     elements_[0] = new oType
         (
-            length,
+            restrictionLocation,
             radious,
             initialZ,
             squareSize,
             squareRadious,
             rnd,
-            name
+            "oType1"
         );
 
     elements_[1] = new ring
@@ -114,55 +122,47 @@ multiElement(3,name)
             pipeRadious,
             initialZ,
             4,
-            M_PI / 2.0,
-            "before_restriction" 
+            M_PI / 4.0,
+            "ring1" 
         );
 
+    elements_[2] = new oType
+        (
+            restrictionLength,
+            radious,
+            initialZ + restrictionLocation,
+            squareSize,
+            squareRadious,
+            rnd,
+            "oType2"
+        );
     double z = restrictionLocation + restrictionLength;
     double l = length - z;
     double iZ = initialZ + z;
-    elements_[2] = new ring
+
+    elements_[3] = new oType
+        (
+            l,
+            radious,
+            iZ,
+            squareSize,
+            squareRadious,
+            rnd,
+            "oType2"
+        );
+
+    elements_[4] = new ring
         (
             l,
             radious,
             pipeRadious,
             iZ,
             4,
-            M_PI / 2.0,
-            "after_restriction" 
+            M_PI / 4.0,
+            "ring2" 
         );
-    /*double r = squareRadious * radious;
-    double a = squareSize * radious;
-
-    elements_[0] = 
-        new cylinder
-        (
-            point( - a / 2.0 , - a / 2.0 , initialZ ),
-            a,
-            length,
-            r
-        );
-
-    for(int i=0; i<4; i++){
-        float alpha1 = (i + 0.5) * 2.0 * M_PI / 4.0;
-        float alpha2 = (i+1.5) * 2.0 * M_PI / 4.0;
-        elements_[i+1] = new cylinder
-            (
-                sqrt(2) * 0.5 * a,
-                radious,
-                alpha1,
-                alpha2,
-                initialZ,
-                initialZ + length
-            );
-    }*/
-
 
 };
-
-
-
-
 
 
 
