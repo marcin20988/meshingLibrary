@@ -1,5 +1,6 @@
 #include "cylinder.H"
-
+namespace meshing
+{
 //trapezoid element in a ring between two radii (and two andgles)
 cylinder::cylinder
 (
@@ -257,5 +258,6 @@ cylinder::cylinder
 
 };
 
+}//end namespace meshing
 
 

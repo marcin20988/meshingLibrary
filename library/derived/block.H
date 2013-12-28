@@ -4,6 +4,8 @@
 #include "mesh.H"
 #include <math.h>
 
+namespace meshing
+{
 class block:public element{
  public:
   //create a cube
@@ -38,4 +40,7 @@ class block:public element{
 
 
 };
+
+}//end namespace meshing
 #endif
+

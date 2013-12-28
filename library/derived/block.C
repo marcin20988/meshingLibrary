@@ -1,5 +1,9 @@
 #include "block.H"
-    
+
+namespace meshing
+
+{
+
 block::block
 (
     point p1, //starting point
@@ -139,3 +143,4 @@ block::block
         );
 };
 
+}//end namespace meshing

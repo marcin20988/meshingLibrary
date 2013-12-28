@@ -3,10 +3,14 @@
 #include <string>
 #include <iostream>
 #include "primitives.H"
+namespace meshing
+{
+
 
 //abstract class for element objects (simple geometric objects)
 //this class is used inside mesh to write all vertices, hexes and edges
-class element{
+class element
+{
  protected:
   int nrOfHexes_;
   hex *hexList_;
@@ -35,20 +39,23 @@ class element{
 
   virtual std::string write();
 
-  virtual void nCell(int nX, int nY, int nZ){
+  virtual void nCell(int nX, int nY, int nZ)
+  {
       for(int i = 0; i <  nrOfHexes_; i++){
           hexList_[i].nCell(nX,nY,nZ);
       }
   };
   
-  virtual void nGrading(int nX, int nY, int nZ){
+  virtual void nGrading(int nX, int nY, int nZ)
+  {
       for(int i = 0; i <  nrOfHexes_; i++){
           hexList_[i].nGrading(nX,nY,nZ);
       }
   };
 
 
-  virtual void setArcsN(const int n){
+  virtual void setArcsN(const int n)
+  {
       nrOfArcs_ = n;
       delete[] arcList_;
       arcList_ = new arc[n];
@@ -57,6 +64,17 @@ class element{
   virtual ~element(){};
 
   virtual int addArcsToList(arc *&aList, int & arcListLength);
+
+  virtual void findFace(coordinate axis, double value, patch& targetPatch) const
+  {
+      for(int i=0; i< nrOfHexes_; i++)
+      {
+          targetPatch.addFace
+              (
+                  hexList_[i].findFace(axis, value)
+              );
+      }
+  };
 };
 
 
@@ -139,6 +157,15 @@ class multiElement: public element
       return n;
   };
 
-
+  virtual void findFace(coordinate axis, double value, patch& targetPatch) const
+  {
+      for(int i=0; i< nrOfElements_; i++){
+          elements_[i] -> findFace(axis, value, targetPatch);
+      }
+  }
 };
+
+}//end namespace meshing
 #endif
+
+

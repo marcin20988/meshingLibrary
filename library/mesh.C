@@ -3,11 +3,15 @@
 #include "mesh.H"
 #include <iostream>
 
+namespace meshing
+{
 mesh::mesh():
     numberOfVertices_(0),
     verticesList_(NULL),
     numberOfElements_(0),
     elementList_(NULL),
+    numberOfPatches_(0),
+    patchList_(NULL),
     numberOfArcs_(0),
     arcList_(NULL),
     convertToMeters_(1.0)
@@ -15,7 +19,8 @@ mesh::mesh():
     blockMeshFile_.open("blockMeshDict",std::fstream::trunc);
 };
 
-void mesh::addElement(element& target){
+void mesh::addElement(element& target)
+{
     //create temporary list of elements and then repalce original list with the new one
     numberOfElements_++;
     element **elementListTemp = new element*[numberOfElements_];
@@ -79,7 +84,6 @@ void mesh::write()
     //-----------write edges
     std::cout << "number of edges in the mesh: " << numberOfArcs_ << std::endl;
 
-    //TODO:complete arc-writing function
     blockMeshFile_ << "\nedges\n(\n";
     std::string arcs = "";
     for(int i=0; i<numberOfArcs_;  i++){
@@ -95,15 +99,16 @@ void mesh::write()
     }
     blockMeshFile_ << "blocks\n(\n" << blocks << ");\n\n";
 
-    //-----------write boundaries TODO
+    //-----------write boundaries
     std::string boundaries = "";
-    /*for(int i=0; i<numberOfElements_; i++){
-        blocks += elementList_[i].write();
-    }*/
-    blockMeshFile_ << "boundary\n(\n" << boundaries << ");\n\n";
+    for(int i=0; i<numberOfPatches_; i++){
+        boundaries += patchList_[i].write();
+    }
+    blockMeshFile_ << "patches\n(\n" << boundaries << ");\n\n";
 }
 
-std::string mesh::header(){
+std::string mesh::header()
+{
     std::string header_ = "/*--------------------------------*- C++ -*----------------------------------*\n";
     header_ +="| =========                 |                                                 |\n";
     header_ +="| \\      /  F ield         | OpenFOAM: The Open Source CFD Toolbox           |\n";
@@ -122,4 +127,64 @@ std::string mesh::header(){
 
     return header_;
 }
+
+void mesh::addPatch(coordinate axis, double value, std::string name, patchType pType)
+{
+    std::cout << "current number of patches: " << numberOfPatches_ << std::endl;
+    std::cout << "Adding new patch: " << name << "\t..." << std::flush;
+    patch * pList = new patch[numberOfPatches_ + 1];
+
+    for(int i=0; i<numberOfPatches_; i++)
+    {
+        pList[i] = patchList_[i];
+    }
+
+    pList[numberOfPatches_++] = patch(name,pType);
+    delete[] patchList_;
+
+    patchList_ = pList;
+    std::cout << "\tdone" << std::endl;
+
+    std::cout << "Adding faces to patch: " << name << "\t..." << std::flush;
+    for(int i=0; i< numberOfElements_; i++)
+    {
+        elementList_[i] -> findFace(axis,value,patchList_[numberOfPatches_ - 1]);
+    }
+    std::cout << "\tdone" << std::endl;
+
+};
+
+int mesh::findPatchID(std::string name) const
+{
+    int i = 0;
+    int label = -1;
+
+    while(i < numberOfPatches_ && label < 0)
+    {
+        if(patchList_[i].name() == name) label = i;
+        i++;
+    }
+
+    return label;
+
+}
+
+void mesh::addToPatch(coordinate axis, double value, std::string name)
+{
+    int label = findPatchID(name);
+
+    //-1 returned if patch not found
+    if(label <0) return;
+
+    std::cout << "Adding faces to patch: " << name << "\t..." << std::flush;
+    for(int i=0; i< numberOfElements_; i++)
+    {
+        elementList_[i] -> findFace(axis,value,patchList_[label]);
+    }
+    std::cout << "\tdone" << std::endl;
+
+}
+
+}//end namespace meshing
 #endif
+

@@ -1,5 +1,7 @@
 #include "pipes.H"
 
+namespace meshing
+{
 namespace pipe
 {
 
@@ -167,3 +169,4 @@ multiElement(5,name)
 
 
 };//end namespace pipe
+}//end namespace meshing

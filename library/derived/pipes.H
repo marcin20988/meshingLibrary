@@ -1,6 +1,8 @@
 #ifndef pipes_H
 #define pipes_H
 #include "cylinder.H"
+namespace meshing
+{
 
 namespace pipe
 {
@@ -83,6 +85,7 @@ class restrictedPipe: public multiElement
           std::string name = "restrictedPipe"
       );
   
+
   void nCell(int nR, int nTheta, int nZ)
     {
         int nz1 = nZ * z1_ / l_;
@@ -104,10 +107,28 @@ class restrictedPipe: public multiElement
         elements_[4] -> nCell(nR2, nTheta , nz3);
     };
 
+  void nCell(int nR, int nTheta, int nZ1, int nZ2, int nZ3)
+  {
+        int nR1 = nR * r_ / R_;
+        int nR2 = nR * (R_ - r_) / R_;
+
+        //first oType
+        elements_[0] -> nCell(nR1, nTheta , nZ1);
+        //ring around first oType
+        elements_[1] -> nCell(nR2, nTheta , nZ1);
+        //restriction section (oType)
+        elements_[2] -> nCell(nR1, nTheta , nZ2);
+        //second oType
+        elements_[3] -> nCell(nR1, nTheta , nZ3);
+        //ring around second oType
+        elements_[4] -> nCell(nR2, nTheta , nZ3);
+  };
+
 };
 
 
 }//end namespace pipe
 
-
+}//end namespace meshing
 #endif
+

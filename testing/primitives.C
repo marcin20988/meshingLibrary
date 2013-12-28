@@ -1,9 +1,9 @@
-#include "primitives.H"
-#include "block.H"
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "pipes.H"
+#include "meshing.H"
+
+using namespace meshing;
 
 int main(){
     /*pipe::oType pipe1
@@ -23,7 +23,7 @@ int main(){
             0 //double deltaAlpha = 0,
             //std::string name = "ring"
         );*/
-    pipe::restrictedPipe pipe1
+    /*pipe::restrictedPipe pipe1
         (
             3.0,
             0.1,
@@ -31,7 +31,7 @@ int main(){
             0.4,
             0.2
         );
-
+*/
 
     /*pipe::oType pipe2
         (
@@ -53,14 +53,44 @@ int main(){
           //std::string name = "ring"
 
         );*/
-    pipe1.nCell(25,24,100);
+ //   pipe1.nCell(25,24,10,20,100);
+
+    std::cout << asin(1) << std::endl;
+    std::cout << sin(asin(1)) << std::endl;
+
+    cylinder cylinder1
+        (
+            2.0,
+            3.0,
+            0,
+            1,
+            0,
+            1
+        );
+
+    /*block block1
+        (
+            point(3.0,3.0,0.0),
+            1.0
+        );*/
 
     mesh M;
-    M.addElement(pipe1);
+    //M.addElement(block1);
+    M.addElement(cylinder1);
+
+//    M.addPatch(x,0.0,"wall1");
+//    M.addToPatch(x,1.0,"wall1");
+
+//    M.addPatch(y,0.0,"wall2",w);
+//    M.addToPatch(y,2.0,"wall2");
+    
+    constant::tolerance = 1e-03;
+    //M.addPatch(r,3.0,"roundWall1",w);
+    M.addPatch(theta,0,"roundWall2",w);
+   // M.addElement(pipe1);
 
     M.write();
 
 
-    std::cout << pipe1.write();
     return 0;
 }

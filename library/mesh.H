@@ -4,6 +4,9 @@
 #include <iostream>
 #include "elements.H"
 
+namespace meshing
+{
+
 class mesh{
  protected:
   int numberOfVertices_;
@@ -12,12 +15,17 @@ class mesh{
   int numberOfElements_;
   element **elementList_;
 
+  int numberOfPatches_;
+  patch * patchList_;
+
   int numberOfArcs_;
   arc *arcList_;
 
   float convertToMeters_;
 
   std::ofstream blockMeshFile_;
+
+  int findPatchID(std::string name) const;
 
  public:
   ~mesh(){}
@@ -34,6 +42,12 @@ class mesh{
 
   std::string header();
 
+  void addPatch(coordinate axis, double value, std::string name, patchType = p);
+
+  void addToPatch(coordinate axis, double value, std::string name);
 };
 
+}//end namespace meshing
 #endif
+
+

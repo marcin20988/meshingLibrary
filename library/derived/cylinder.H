@@ -1,11 +1,12 @@
 #ifndef cylinders_H
-#define cylinder_H
+#define cylinders_H
 
 #include "elements.H"
-#include "mesh.H"
 #include <math.h>
 
-enum rounding {oneSided, twoSided};
+namespace meshing
+{
+
 
 class cylinder: public element
 {
@@ -36,5 +37,6 @@ class cylinder: public element
 
 };
 
-
+}//end namespace meshing
 #endif
+

@@ -1,6 +1,10 @@
 #include "primitives.H"
 #include "math.h"
 
+namespace meshing
+{
+double constant::tolerance = 1e-05;
+
 //points--------------------------------------------------------------
 
 point::point(double x, double y, double z){
@@ -38,16 +42,16 @@ point& point::operator=(const point& P){
 
 bool point::operator==(const point& P){
     //TODO: define tolerance in some better way
-    double tolerance = 1e-04;
+    //double tolerance = 1e-04;
     bool same = false;
     if
     (
         //x_ == P.x()
         //&& y_ == P.y()
         //&& z_ == P.z()
-        fabs( (x_ - P.x()) ) < tolerance
-        && fabs( (y_ - P.y()) )< tolerance
-        && fabs( (z_ - P.z()) ) < tolerance
+        fabs( (x_ - P.x()) ) < constant::tolerance
+        && fabs( (y_ - P.y()) )< constant::tolerance
+        && fabs( (z_ - P.z()) ) < constant::tolerance
     ){
         same = true;
     }
@@ -56,18 +60,28 @@ bool point::operator==(const point& P){
 };
 //faces --------------------------------------------------------------
 face::face(
-    const point p1, 
-    const point p2, 
-    const point p3, 
-    const point p4
-){
-    point1_ = p1;
-    point2_ = p2;
-    point3_ = p3;
-    point4_ = p4;
+    const int l1, 
+    const int l2, 
+    const int l3, 
+    const int l4
+)
+{
+   label1_ = l1; 
+   label2_ = l2; 
+   label3_ = l3; 
+   label4_ = l4; 
 }
 
 face::face(){};
+
+face& face::operator=(const face& F){
+    label1_ = F.label(0);
+    label2_ = F.label(1);
+    label3_ = F.label(2);
+    label4_ = F.label(3);
+
+    return *this;
+}
 
 //arcs ---------------------------------------------------------------
 
@@ -227,3 +241,153 @@ std::string hex::write(){
 
     return block;
 }
+
+face hex::findFace(coordinate axis, double value) const
+{
+    int * pList = new int[4];
+    for(int i=0; i<4;i++) pList[i] = -1;
+
+    int iter = 0;
+    double rho;
+    double angle;
+
+    for(int i=0; i< 8; i++)
+    {
+        switch (axis)
+        {
+            case x:
+            if( fabs( pointList_[i].x() - value) < constant::tolerance && iter < 4 )
+            {
+                pList[iter] = labelList_[i];
+                iter++;
+            }
+            break;
+            //------------
+            case y:
+            if( fabs( pointList_[i].y() - value) < constant::tolerance && iter < 4 )
+            {
+                pList[iter] = labelList_[i];
+                iter++;
+            }
+            break;
+            //------------
+            case z:
+            if( fabs( pointList_[i].z() - value) < constant::tolerance && iter < 4 )
+            {
+                pList[iter] = labelList_[i];
+                iter++;
+            }
+            break;
+            //------------
+            case r:
+            rho = sqrt 
+                ( 
+                    pow( pointList_[i].x() , 2)
+                    + pow( pointList_[i].y() , 2)
+                );
+
+            if( fabs( rho - value) < constant::tolerance && iter < 4 )
+            {
+                pList[iter] = labelList_[i];
+                iter++;
+            }
+            break;
+            //------------
+            case theta:
+            angle = 0;
+            rho = sqrt 
+                ( 
+                    pow( pointList_[i].x() , 2)
+                    + pow( pointList_[i].y() , 2)
+                );
+
+            if( pointList_[i].x() >= 0 ){
+                if(pointList_[i].x() == 0 && pointList_[i].y() == 0)
+                {
+                    angle = 0;
+                }else
+                {
+                    angle = asin( pointList_[i].y() / rho);
+                }
+            }else if( pointList_[i].x() < 0 )
+            {
+                angle = - asin( pointList_[i].y() / rho ) + M_PI;
+            }
+            
+            if( fabs( angle - value) < constant::tolerance && iter < 4 )
+            {
+                pList[iter] = labelList_[i];
+                iter++;
+            }
+            break;
+        }
+    }
+
+    return face(pList[0], pList[1], pList[3], pList[2]);
+
+};
+
+std::string face::write()
+{
+    std::string a = "";
+    a += "\t\t";
+    
+    std::ostringstream ss;
+    ss <<"(" << label1_ << " " 
+        << label2_ << " " 
+        << label3_ << " " 
+        << label4_  
+        <<")\n";
+
+    std::string s(ss.str());
+    a += s;
+    return a;
+}
+//patches:--------------------------------------------------------------------
+
+
+void patch::addFace(const face F)
+{
+    //if at least one label is negative skip this face
+    for(int i=0; i<4; i++){
+        if( F.label(i) < 0) return;
+    }
+
+
+    face * fList = new face[numberOfFaces_ + 1];
+    for(int i=0; i<numberOfFaces_; i++)
+    {
+        fList[i] = faceList_[i];
+    }
+    fList[numberOfFaces_++] = F;
+
+    delete[] faceList_;
+    faceList_ = fList;
+    
+};
+
+std::string patch::write()
+{
+    std::string a="\t";
+    switch (type_)
+    {
+        case p:
+            a += "patch ";
+            break;
+        case w:
+            a+= "wall ";
+            break;
+    }
+    
+    a += name_ + "\n\t(\n";
+
+    for(int i=0; i<numberOfFaces_; i++)
+    {
+        a+= faceList_[i].write();
+    }
+
+    a += "\t)\n\n";
+    return a;
+};
+
+}//end namespace meshing

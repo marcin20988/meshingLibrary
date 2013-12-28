@@ -1,5 +1,6 @@
 #include "elements.H"
-
+namespace meshing
+{
 element::element(const int N, const std::string name, const int Narc):
 nrOfHexes_(N),
 hexList_( new hex[N] ),
@@ -79,3 +80,6 @@ int element::addArcsToList(arc *&aList, int & arcListLength)
     return counter;
 
 }
+
+}//end namespace meshing
+
