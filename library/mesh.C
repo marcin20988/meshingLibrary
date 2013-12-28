@@ -18,15 +18,15 @@ mesh::mesh():
 void mesh::addElement(element& target){
     //create temporary list of elements and then repalce original list with the new one
     numberOfElements_++;
-    element *elementListTemp = new element[numberOfElements_];
+    element **elementListTemp = new element*[numberOfElements_];
 
     if(numberOfElements_ > 1){
         for(int i=0; i<numberOfElements_-1; i++){
             elementListTemp[i] = elementList_[i];
         }
-        elementListTemp[numberOfElements_ - 1] = target;
+        elementListTemp[numberOfElements_ - 1] = &target;
     }else{
-        elementListTemp[0] = target;
+        elementListTemp[0] = &target;
     }
 
     delete[] elementList_;
@@ -41,12 +41,12 @@ void mesh::write()
 
     std::cout << "Labeling arcs \n" << std::endl;
     for(int i=0; i < numberOfElements_; i++){
-        elementList_[i].labelArcs(verticesList_,numberOfVertices_);
+        elementList_[i] -> labelArcs(verticesList_,numberOfVertices_);
     }
     std::cout << "adding arcs to global list" << std::endl;
     int arcCount = 0;
     for(int i=0; i < numberOfElements_; i++){
-        arcCount += elementList_[i].addArcsToList(arcList_, numberOfArcs_);
+        arcCount += elementList_[i] -> addArcsToList(arcList_, numberOfArcs_);
     }
     std::cout << "added " << arcCount << " arcs\n\n";
 
@@ -54,7 +54,7 @@ void mesh::write()
     std::cout << "number of elements in the mesh:" << numberOfElements_ << std::endl;
     std::cout << "\n{\n ";
     for(int i=0; i<numberOfElements_;  i++){
-        std::cout << elementList_[i].name() << std::endl;
+        std::cout << elementList_[i] -> name() << std::endl;
     }
     std::cout << "}\n\n";
     
@@ -91,7 +91,7 @@ void mesh::write()
     //-----------write blocks
     std::string blocks = "";
     for(int i=0; i<numberOfElements_; i++){
-        blocks += elementList_[i].write();
+        blocks += elementList_[i] -> write();
     }
     blockMeshFile_ << "blocks\n(\n" << blocks << ");\n\n";
 

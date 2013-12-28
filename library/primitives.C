@@ -1,4 +1,5 @@
 #include "primitives.H"
+#include "math.h"
 
 //points--------------------------------------------------------------
 
@@ -36,12 +37,17 @@ point& point::operator=(const point& P){
 }
 
 bool point::operator==(const point& P){
+    //TODO: define tolerance in some better way
+    double tolerance = 1e-04;
     bool same = false;
     if
     (
-        x_ == P.x()
-        && y_ == P.y()
-        && z_ == P.z()
+        //x_ == P.x()
+        //&& y_ == P.y()
+        //&& z_ == P.z()
+        fabs( (x_ - P.x()) ) < tolerance
+        && fabs( (y_ - P.y()) )< tolerance
+        && fabs( (z_ - P.z()) ) < tolerance
     ){
         same = true;
     }

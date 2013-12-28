@@ -4,6 +4,8 @@
 #include <iostream>
 #include "primitives.H"
 
+//abstract class for element objects (simple geometric objects)
+//this class is used inside mesh to write all vertices, hexes and edges
 class element{
  protected:
   int nrOfHexes_;
@@ -38,6 +40,13 @@ class element{
           hexList_[i].nCell(nX,nY,nZ);
       }
   };
+  
+  virtual void nGrading(int nX, int nY, int nZ){
+      for(int i = 0; i <  nrOfHexes_; i++){
+          hexList_[i].nGrading(nX,nY,nZ);
+      }
+  };
+
 
   virtual void setArcsN(const int n){
       nrOfArcs_ = n;
@@ -51,6 +60,10 @@ class element{
 };
 
 
+//abstract class inheriting from element class
+//it contains multiple element objects and all functions from element class
+//are overwritten with functions calling appropriate methods on each instance of
+//the element class created inside multiElement class
 class multiElement: public element
 {
  protected:
@@ -70,7 +83,6 @@ class multiElement: public element
  
   virtual int assignLabels(point *& pList, int &pListLength)
   {
-      std::cout << "multi-element object\n";
       int n = 0;
       for(int i=0; i< nrOfElements_; i++){
           n += elements_[i] -> assignLabels(pList, pListLength);
@@ -81,7 +93,6 @@ class multiElement: public element
 
   virtual void labelArcs(const point *pList, const int pListLength)
   {
-      std::cout << "multi-element object\n";
       for(int i=0; i< nrOfElements_; i++){
           elements_[i] -> labelArcs(pList, pListLength);
       }
@@ -89,7 +100,6 @@ class multiElement: public element
 
   virtual std::string write()
   {
-      std::cout << "multi-element object\n";
       std::string s="";
       for(int i=0; i< nrOfElements_; i++){
           s += elements_[i] -> write();
@@ -104,6 +114,13 @@ class multiElement: public element
       }
   };
 
+  virtual void nGrading(int nX, int nY, int nZ)
+  {
+      for(int i=0; i< nrOfElements_; i++){
+          elements_[i] -> nGrading(nX, nY, nZ);
+      }
+  };
+
   virtual void setArcsN(const int n)
   {
       for(int i=0; i< nrOfElements_; i++){
@@ -115,7 +132,6 @@ class multiElement: public element
 
   virtual int addArcsToList(arc *&aList, int & arcListLength)
   {
-      std::cout << "multi-element object\n";
       int n = 0;
       for(int i=0; i< nrOfElements_; i++){
           n += elements_[i] -> addArcsToList(aList, arcListLength);

@@ -10,7 +10,7 @@ class mesh{
   point *verticesList_;
 
   int numberOfElements_;
-  element *elementList_;
+  element **elementList_;
 
   int numberOfArcs_;
   arc *arcList_;
