@@ -56,6 +56,7 @@ class face
 
   face();
   face& operator=(const face& F);
+  bool operator==(const face& F);
   std::string write();
 
   int label(const int i) const
@@ -124,7 +125,7 @@ class hex
     point pointList_[8];
     int labelList_[8];
     int cells[3];
-    int grading[3];
+    double grading[3];
  public:
 
     hex();
@@ -136,7 +137,7 @@ class hex
         cells[1] = nY;
         cells[2] = nZ;
     }
-    void nGrading(int nX, int nY, int nZ){
+    void nGrading(double nX, double nY, double nZ){
         grading[0] = nX;
         grading[1] = nY;
         grading[2] = nZ;
@@ -172,6 +173,8 @@ class patch
     {
         return name_;
     };
+  
+    int removeInternalFaces();
 };
 
 }//end namespace meshing

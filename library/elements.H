@@ -46,7 +46,7 @@ class element
       }
   };
   
-  virtual void nGrading(int nX, int nY, int nZ)
+  virtual void nGrading(double nX, double nY, double nZ)
   {
       for(int i = 0; i <  nrOfHexes_; i++){
           hexList_[i].nGrading(nX,nY,nZ);
@@ -132,7 +132,7 @@ class multiElement: public element
       }
   };
 
-  virtual void nGrading(int nX, int nY, int nZ)
+  virtual void nGrading(double nX, double nY, double nZ)
   {
       for(int i=0; i< nrOfElements_; i++){
           elements_[i] -> nGrading(nX, nY, nZ);

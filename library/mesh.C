@@ -100,6 +100,10 @@ void mesh::write()
     blockMeshFile_ << "blocks\n(\n" << blocks << ");\n\n";
 
     //-----------write boundaries
+    
+    //remove internal faces from all patches
+    std::cout << removeInternalFaces();
+
     std::string boundaries = "";
     for(int i=0; i<numberOfPatches_; i++){
         boundaries += patchList_[i].write();
@@ -184,6 +188,25 @@ void mesh::addToPatch(coordinate axis, double value, std::string name)
     std::cout << "\tdone" << std::endl;
 
 }
+
+std::string mesh::removeInternalFaces()
+{
+    std::ostringstream ss;
+    int counter;
+
+    ss << "removing internal faces from patches: \n";
+
+    for(int i = 0; i < numberOfPatches_; i++) 
+    {
+        counter = patchList_[i].removeInternalFaces();
+        ss << "\t" << counter << " faces removed from patch: " << patchList_[i].name() << "\n";
+    }
+
+    return ss.str();
+}
+
+
+
 
 }//end namespace meshing
 #endif

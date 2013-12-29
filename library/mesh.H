@@ -27,6 +27,8 @@ class mesh{
 
   int findPatchID(std::string name) const;
 
+  std::string removeInternalFaces();
+
  public:
   ~mesh(){}
 

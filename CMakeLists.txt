@@ -24,6 +24,7 @@ set_source_files_properties(filename.c PROPERTIES LANGUAGE CXX )
 #Library
 add_subdirectory(library)
 add_subdirectory(testing)
+add_subdirectory(examples)
 
 
 

@@ -105,6 +105,7 @@ multiElement(5,name)
     R_ = pipeRadious;
     z1_ = restrictionLocation;
     z2_ = restrictionLength;
+    a_ = squareSize;
 
     elements_[0] = new oType
         (

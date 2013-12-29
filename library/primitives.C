@@ -83,6 +83,51 @@ face& face::operator=(const face& F){
     return *this;
 }
 
+bool face::operator==(const face& F)
+{
+    bool result = false;
+
+    if
+    (
+        label1_ == F.label(0)
+        || label1_ == F.label(1)
+        || label1_ == F.label(2)
+        || label1_ == F.label(3)
+    )
+    {
+        if
+        (
+            label2_ == F.label(0)
+            || label2_ == F.label(1)
+            || label2_ == F.label(2)
+            || label2_ == F.label(3)
+        )
+        {
+            if
+            (
+                label3_ == F.label(0)
+                || label3_ == F.label(1)
+                || label3_ == F.label(2)
+                || label3_ == F.label(3)
+            )
+            {
+                if
+                (
+                    label4_ == F.label(0)
+                    || label4_ == F.label(1)
+                    || label4_ == F.label(2)
+                    || label4_ == F.label(3)
+                )
+                {
+                    result = true;
+                }
+            }
+        }
+    }
+
+    return result;
+}
+
 //arcs ---------------------------------------------------------------
 
 arc::arc(){};
@@ -323,8 +368,18 @@ face hex::findFace(coordinate axis, double value) const
         }
     }
 
-    return face(pList[0], pList[1], pList[3], pList[2]);
+    face result;
+    
+    if(axis == z)
+    {
+        result = face(pList[0], pList[1], pList[2], pList[3]);
+    }
+    else
+    {
+        result = face(pList[0], pList[1], pList[3], pList[2]);
+    }
 
+    return result;
 };
 
 std::string face::write()
@@ -389,5 +444,52 @@ std::string patch::write()
     a += "\t)\n\n";
     return a;
 };
+
+int patch::removeInternalFaces()
+{
+    int counter = 0;
+    //which elements of list should be removed (-1 = stay; +1 remove);
+    int *labels = new int[numberOfFaces_];
+    for(int i = 0; i < numberOfFaces_; i++)
+    {
+        labels[i] = -1;
+    }
+
+    for(int i = 0; i < numberOfFaces_; i++)
+    {
+        for(int j = 0; j < numberOfFaces_; j++)
+        {
+            if( i != j && faceList_[i] == faceList_[j])
+            {
+                counter++;
+                labels[i] = 1;
+                labels[j] = 1;
+            }
+        }
+    }
+
+    if(counter > 0)
+    {
+        face * fList = new face[numberOfFaces_ - counter]; 
+        int iter = 0;
+        for(int i = 0; i < numberOfFaces_; i++)
+        {
+            if(labels[i] < 0)
+            {
+                fList[iter] = faceList_[i];
+                iter ++;
+            }
+        }
+
+        delete[] faceList_;
+        faceList_ = fList;
+        numberOfFaces_ -= counter;
+    }
+
+    return counter;
+};
+
+
+
 
 }//end namespace meshing

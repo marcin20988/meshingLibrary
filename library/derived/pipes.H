@@ -69,6 +69,7 @@ class restrictedPipe: public multiElement
   double R_;
   double z1_;
   double z2_;
+  double a_;
 
  public:
   restrictedPipe 
@@ -85,6 +86,19 @@ class restrictedPipe: public multiElement
           std::string name = "restrictedPipe"
       );
   
+  void nGrading(double n1, double n2, double n3)
+    {
+        //first oType
+        elements_[0] -> nGrading(1, 1, n1);
+        //ring around first oType
+        elements_[1] -> nGrading(1, 1, n1);
+        //restriction section (oType)
+        elements_[2] -> nGrading(1, 1, n2);
+        //second oType
+        elements_[3] -> nGrading(1, 1, n3);
+        //ring around second oType
+        elements_[4] -> nGrading(1, 1, n3);
+    };
 
   void nCell(int nR, int nTheta, int nZ)
     {
@@ -109,8 +123,14 @@ class restrictedPipe: public multiElement
 
   void nCell(int nR, int nTheta, int nZ1, int nZ2, int nZ3)
   {
-        int nR1 = nR * r_ / R_;
-        int nR2 = nR * (R_ - r_) / R_;
+        double r2 = (1 - a_) * r_;
+        double R2 = R_ - a_ * r_;
+        int nR1 = nR * r2 / R2;
+        int nR2 = ceil ( nR * (R2 - r2) / R2 );
+
+        std::cout << "Desired number of cells in radial direction: " << nR << std::endl;
+        std::cout << "number of cells for restriction part " << nR1 << std::endl;
+        std::cout << "number of cells for rings around restriction part " << nR2 << std::endl;
 
         //first oType
         elements_[0] -> nCell(nR1, nTheta , nZ1);
