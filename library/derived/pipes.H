@@ -63,6 +63,76 @@ class oType: public multiElement
 
 };
 
+/**
+ * \brief
+    * O-Type pipe consisting of multiple segments (also O-Type pipes)
+ */
+class segmentedOType: public multiElement
+{
+ protected:
+  double * segmentsZ_;
+  double l_;
+ public:
+  /**
+   * \brief
+   * constructor is similar to meshing::oType
+   * byt contains two additional arguments:
+   * - segmentsN : how many segments constitute to a full pipe
+   * - location of segments ENDS (relative to the pipe inlet)
+   *   example:
+   *
+   * double * zList[2] = {0.5,2.0}
+   * segmentedOType pipe1
+   * (
+   *    2.0,
+   *    0.2,
+   *    2,
+   *    zList
+   * );
+   * will create pipe of length 2.0 created from two separate O-Type pipe of
+   * with z coordinates from 0 to 0.5 and 0.5 to 2.0.
+   */
+    segmentedOType
+        (
+            double length,
+            double radious,
+            int segmentsN,
+            double * segmentsZ,
+            double initialZ = 0.0,
+            double squareSize = 0.2,
+            double squareRadious = 0.22,
+            rounding = twoSided,
+            std::string name = "segmented-oType-pipe"
+        );
+
+    /**
+     * \brief
+     * number of cells in r, theta and z directions (evenly distributed between
+     * segments)
+     */
+    void nCell(int nR, int nTheta, int nZ)
+    {
+        for(int i=0; i<nrOfElements_; i++)
+        {
+            elements_[i] -> nCell(nR, nTheta, nZ * (segmentsZ_[i] / l_) ) ;
+        }
+    };
+
+    /**
+     * \brief
+     * number of cells in r, theta and z directions (manualy distributed between
+     * segments)
+     */
+    void nCell(int nR, int nTheta, int * nZ)
+    {
+        for(int i=0; i<nrOfElements_; i++)
+        {
+            elements_[i] -> nCell(nR, nTheta, nZ[i] ) ;
+        }
+    };
+
+};
+
 
 /**
  * \brief
@@ -114,6 +184,51 @@ class ring : public multiElement
 
 };
 
+/**
+ * \brief
+ * ring segmented in z direction
+ */
+class segmentedRing: public multiElement
+{
+ protected: 
+  int nSegmentsZ_;
+  double l_;
+  double * segmentEnds_;
+ public:
+  /**
+   * \brief
+   * create a ring element (will be aligned along z-axis in the
+   * cylindrical coordinate system) segmented in z direction
+   *
+   */
+  segmentedRing
+      (
+          double length,
+          double innerRadious,
+          double outerRadious,
+          int nSegmentsZ,
+          double * segmentEnds,
+          double initialZ = 0.0,
+          int numberOfSegments = 4,
+          double deltaAlpha = 0,
+          std::string name = "ring"
+      );
+
+    /**
+     * \brief
+     * number of cells in r, theta and z directions (evenly distributed between
+     * segments)
+     */
+    void nCell(int nR, int nTheta, int nZ)
+    {
+        for(int i=0; i<nrOfElements_; i++)
+        {
+            std::cout << segmentEnds_[i] << std::endl;
+            elements_[i] -> nCell(nR, nTheta, nZ * (segmentEnds_[i] / l_) ) ;
+        }
+    };
+
+};
 
 /**
  * \brief
@@ -242,6 +357,52 @@ class restrictedPipe: public multiElement
 
 };
 
+
+/**
+ * \brief
+ * similar to restricted pipe but downstream pipe section is divided into two
+ * segments (to allow waxInlet from the wall)
+ */
+class pig: public restrictedPipe
+{
+
+ public:
+  /**
+   * \brief
+   * create a restricted pipe element
+   *
+   * Element constitute from 3 oType pipe sections (one preceeding the orifice,
+   * orifice section and one succeeding the orifice) and two ring elements
+   * located around oType pipes in the pre- and succeeding sections
+   * parameters given in the constructor:
+   * - length of pipe (in the z-direction)
+   * - orifice radious
+   * - pipe radious
+   * - z-coordinate of the restriction (relative to the pipe inlet)
+   * - lenght of the restriction (in the z-direction)
+   * - wax inlet length in z direction (will be placed right after the orifice)
+   * - initial z coordinate of the whole element
+   * - size of the square-based hexahedron in the center (this is relative to
+   *   the orifice radious so choose between 0 and 1!)
+   * - radious of above square's rounding (also relative to the orifice radious)
+   * - rounding of the elements around inner hexahedron (should be 'twoSided')
+   * - name
+   */
+  pig 
+      (
+          double length,
+          double radious,
+          double pipeRadious,
+          double restrictionLocation,
+          double restrictionLength,
+          double waxInletLength,
+          double initialZ = 0.0,
+          double squareSize = 0.2,
+          double squareRadious = 0.22,
+          rounding = twoSided,
+          std::string name = "restrictedPipe"
+      );
+};
 
 }//end namespace pipe
 

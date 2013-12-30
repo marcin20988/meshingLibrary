@@ -134,7 +134,7 @@ std::string mesh::header()
 
 void mesh::addPatch(coordinate axis, double value, std::string name, patchType pType)
 {
-    std::cout << "current number of patches: " << numberOfPatches_ << std::endl;
+    std::cout << "\n\ncurrent number of patches: " << numberOfPatches_ << std::endl;
     std::cout << "Adding new patch: " << name << "\t..." << std::flush;
     patch * pList = new patch[numberOfPatches_ + 1];
 
@@ -206,6 +206,167 @@ std::string mesh::removeInternalFaces()
 }
 
 
+void mesh::separateFromPatch
+(
+    std::string target,
+    coordinate axis,
+    double minValue,
+    double maxValue,
+    std::string name,
+    patchType pType
+)
+{
+    removeInternalFaces();
+    int patchID = findPatchID(target);
+    std::cout << "\n\nSeparating patch from patch with label: " << patchID << std::endl;
+    std::cout << "current number of patches: " << numberOfPatches_ << std::endl;
+    std::cout << "Adding new patch: " << name << "\t..." << std::flush;
+    patch * pList = new patch[numberOfPatches_ + 1];
+
+    for(int i=0; i<numberOfPatches_; i++)
+    {
+        pList[i] = patchList_[i];
+    }
+
+    pList[numberOfPatches_++] = patch(name, pType);
+    delete[] patchList_;
+
+    patchList_ = pList;
+    std::cout << "\tdone" << std::endl;
+
+
+    const face * fList = patchList_[patchID].faceList();
+    int n = patchList_[patchID].faceN();
+
+    point p;
+    int pLabel;
+
+    face * faceToMove = new face[n];
+
+    //how many faces were moved
+    int counter = 0;
+    //if all four vetices of a face are in correct region then move it
+    int verts;
+
+    double rho, angle;
+    for(int i = 0; i< n; i++)
+    {
+        verts = 0;
+        faceToMove[i] = face(-1,-1,-1,-1);
+        for(int j = 0; j < 4; j++)
+        {
+            pLabel = fList[i].label(j);
+            p = verticesList_[pLabel];
+
+            switch (axis)
+            {
+
+                case x:
+                    if
+                    ( 
+                        p.x() > minValue - constant::tolerance 
+                        && p.x() < maxValue + constant::tolerance 
+                    )
+                    {
+                        verts++;
+                    }
+                    break;
+                    //-------------------------------------------
+
+                case y:
+                    if
+                    ( 
+                        p.y() > minValue - constant::tolerance 
+                        && p.y() < maxValue + constant::tolerance 
+                    )
+                    {
+                        verts++;
+                    }
+                    break;
+                    //-------------------------------------------
+
+                case z:
+                    if
+                    ( 
+                        p.z() > minValue - constant::tolerance 
+                        && p.z() < maxValue + constant::tolerance 
+                    )
+                    {
+                        verts++;
+                    }
+                    break;
+                    //-------------------------------------------
+
+                case r:
+                    rho = sqrt 
+                        ( 
+                            pow( p.x() , 2)
+                            + pow( p.y() , 2)
+                        );
+
+                    if
+                    ( 
+                        rho > minValue - constant::tolerance 
+                        && rho < maxValue + constant::tolerance 
+                    )
+                    {
+                        verts++;
+                    }
+                    break;
+                    //-------------------------------------------
+
+                case theta:
+                    angle = 0;
+                    rho = sqrt 
+                        ( 
+                            pow( p.x() , 2)
+                            + pow( p.y() , 2)
+                        );
+                    if( p.x() >= 0 ){
+                        if(p.x() == 0 && p.y() == 0)
+                        {
+                            angle = 0;
+                        }else
+                        {
+                            angle = asin( p.y() / rho);
+                        }
+                    }else if( p.x() < 0 )
+                    {
+                        angle = - asin( p.y() / rho ) + M_PI;
+                    }
+
+                    if
+                    ( 
+                        angle > minValue - constant::tolerance 
+                        && angle < maxValue + constant::tolerance 
+                    )
+                    {
+                        verts++;
+                    }
+                    break;
+                    //-------------------------------------------
+            }
+
+            if(verts == 4)
+            {
+                faceToMove[i] = fList[i];
+                counter++;
+            }
+        }
+
+    }
+    std::cout << "number of faces marked to move: " << counter << "\n";
+
+    for(int i = 0; i < n; i++)
+    {
+        if(faceToMove[i].label(0) >= 0)
+        {
+            patchList_[numberOfPatches_ - 1].addFace(faceToMove[i]);
+            patchList_[patchID].removeFace(faceToMove[i]);
+        }
+    }
+
+}
 
 
 }//end namespace meshing

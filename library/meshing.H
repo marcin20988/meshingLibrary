@@ -2,6 +2,7 @@
 #define meshing_h
 
 /*! \mainpage blockMeshDict preprocessing library
+ * \author Marcin Traczyk <marcin.traczyk.88@gmail.com>
  *
  * \section intro_sec Introduction
  *
@@ -40,6 +41,11 @@
  *
  * For more details see one of the examples provided with the source code.
  * 
+ * \section contribute_sec Contribution
+ *
+ * If you not only use this library but also create new functionalities please
+ * contribute so others also can benefit from your work.
+ *
  */
 
 #include "mesh.H"

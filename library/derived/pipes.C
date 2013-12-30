@@ -15,7 +15,7 @@ oType::oType
     rounding,
     std::string name
 ):
-multiElement(5,name)
+    multiElement(5,name)
 {
     double r = 2.0 / sqrt(2.0) * squareRadious * radious;
     double a = 2.0 / sqrt(2.0) * squareSize * radious;
@@ -47,6 +47,96 @@ multiElement(5,name)
 
 
 };
+
+segmentedRing::segmentedRing
+(
+    double length,
+    double innerRadious,
+    double outerRadious,
+    int nSegmentsZ,
+    double * segmentEnds,
+    double initialZ,
+    int numberOfSegments,
+    double deltaAlpha,
+    std::string name
+):
+    multiElement(nSegmentsZ),
+    nSegmentsZ_(nSegmentsZ),
+    l_(length)
+{
+    segmentEnds_ = new double[nSegmentsZ];
+    for(int i=0; i< nSegmentsZ; i++)
+    {
+        segmentEnds_[i] = segmentEnds[i];
+    }
+
+    double iZ = initialZ;
+    double prevL = 0;
+    for( int i=0; i< nSegmentsZ; i++)
+    {
+        if(i > 0)
+        {
+            prevL = segmentEnds[i - 1];
+        }
+        elements_[i] = new ring
+            (
+                segmentEnds[i] - prevL,
+                innerRadious,
+                outerRadious,
+                iZ,
+                numberOfSegments,
+                deltaAlpha,
+                name
+            );
+        iZ += segmentEnds[i];
+    }
+
+};
+
+segmentedOType::segmentedOType
+(
+    double length,
+    double radious,
+    int segmentsN,
+    double * segmentsZ,
+    double initialZ,
+    double squareSize, //relative to the pipe radious!
+    double squareRadious, //relative to the pipe radious
+    rounding rnd,
+    std::string name
+):
+    multiElement(segmentsN,name),
+    l_(length)
+{
+    segmentsZ_ = new double[segmentsN];
+    for(int i=0; i< segmentsN; i++)
+    {
+        segmentsZ_[i] = segmentsZ[i];
+    }
+
+    double iZ = initialZ;
+
+    double prevL = 0;
+    for( int i=0; i< segmentsN; i++)
+    {
+        if(i > 0)
+        {
+            prevL = segmentsZ[i - 1];
+        }
+        elements_[i] = new oType
+            (
+                segmentsZ[i] - prevL,
+                radious,
+                iZ,
+                squareSize,
+                squareRadious,
+                rnd,
+                name
+            );
+        iZ += segmentsZ[i];
+    }
+};
+
 
 //----------------------------------------
 ring::ring
@@ -168,6 +258,65 @@ multiElement(5,name)
 };
 
 
+pig::pig
+(
+    double length,
+    double radious,
+    double pipeRadious,
+    double restrictionLocation, //from the begining of pipe
+    double restrictionLength,
+    double waxInletLength,
+    double initialZ,
+    double squareSize, //relative to the pipe radious!
+    double squareRadious, //relative to the pipe radious
+    rounding rnd,
+    std::string name
+):
+    restrictedPipe
+    (
+        length,
+        radious,
+        pipeRadious,
+        restrictionLocation,
+        restrictionLength,
+        initialZ,
+        squareSize,
+        squareRadious,
+        rnd,
+        name
+    )
+{
+    double z = restrictionLocation + restrictionLength;
+    double l = length - z;
+    double iZ = initialZ + z;
+
+    double zPipe[2] = {waxInletLength, l};
+    elements_[3] = new segmentedOType
+        (
+            l,
+            radious,
+            2,
+            zPipe,
+            iZ,
+            squareSize,
+            squareRadious,
+            rnd,
+            "oType2"
+        );
+
+    elements_[4] = new segmentedRing
+        (
+            l,
+            radious,
+            pipeRadious,
+            2,
+            zPipe,
+            iZ,
+            4,
+            M_PI / 4.0,
+            "ring2" 
+        );
+}
 
 };//end namespace pipe
 }//end namespace meshing

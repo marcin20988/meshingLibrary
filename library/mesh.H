@@ -2,6 +2,7 @@
 #define mesh_H
 #include <fstream>
 #include <iostream>
+#include <math.h>
 #include "elements.H"
 
 
@@ -90,6 +91,20 @@ class mesh{
    * add faces on a given plane to selected patch
    */
   void addToPatch(coordinate axis, double value, std::string name);
+
+  /**
+   * \brief
+   * separate part of a patch into new patch
+   */
+  void separateFromPatch
+      (
+          std::string target,
+          coordinate axis,
+          double minValue,
+          double maxValue,
+          std::string child2,
+          patchType = p
+      );
 };
 
 }//end namespace meshing

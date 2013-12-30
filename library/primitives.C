@@ -54,6 +54,14 @@ bool point::operator==(const point& P){
     return same;
 };
 //faces --------------------------------------------------------------
+face::face()
+{
+    /*label1_= -1;
+    label2_= -1;
+    label3_= -1;
+    label4_= -1;*/
+};
+
 face::face(
     const int l1, 
     const int l2, 
@@ -67,7 +75,7 @@ face::face(
    label4_ = l4; 
 }
 
-face::face(){};
+//face::face(){};
 
 face& face::operator=(const face& F){
     label1_ = F.label(0);
@@ -377,7 +385,7 @@ face hex::findFace(coordinate axis, double value) const
     return result;
 };
 
-std::string face::write()
+std::string face::write() const
 {
     std::string a = "";
     a += "\t\t";
@@ -415,6 +423,44 @@ void patch::addFace(const face F)
     faceList_ = fList;
     
 };
+
+void patch::removeFace(int target)
+{
+    face * fList = new face[numberOfFaces_ - 1]; 
+    int iter = 0;
+    for(int i = 0; i < numberOfFaces_; i++)
+    {
+        if(i != target)
+        {
+            fList[iter] = faceList_[i];
+            iter ++;
+        }
+    }
+
+    delete[] faceList_;
+    faceList_ = fList;
+    numberOfFaces_--;
+}
+
+void patch::removeFace(const face target)
+{
+    face * fList = new face[numberOfFaces_ - 1]; 
+    int iter = 0;
+    for(int i = 0; i < numberOfFaces_; i++)
+    {
+        if(faceList_[i] == target)
+        {
+        }else
+        {
+            fList[iter] = faceList_[i];
+            iter++;
+        }
+    }
+
+    delete[] faceList_;
+    faceList_ = fList;
+    numberOfFaces_--;
+}
 
 std::string patch::write()
 {
