@@ -6,9 +6,21 @@
 
 namespace meshing
 {
+
+/**
+ * \brief
+ * simple block-like elements defined in cartesian coordinate system
+ */
 class block:public element{
  public:
-  //create a cube
+  /**
+   * \brief
+   * cube with given point and edge length 
+   *
+   * Point given in constructor is a closest point to origin ot the coordinate
+   * system. It means that other point are created by adition of the edge length
+   * to one of the initial-point coordinates
+   */
   block
       (
           point p1, //starting point
@@ -16,7 +28,14 @@ class block:public element{
           std::string name="cube"
       );
   
-  //create a box
+  /**
+   * \brief
+   * cuboid with given point and edge length 
+   *
+   * Point given in constructor is a closest point to origin ot the coordinate
+   * system. It means that other point are created by adition of a,b or c
+   * parameter to one of the initial-point coordinates
+   */
   block
       (
           point p1, //starting point
@@ -26,7 +45,19 @@ class block:public element{
           std::string name="box"
       );
 
-  //create a trapezoid
+  /**
+   * \brief
+   * hexahedron created between two radii and angles
+   *
+   * parameters given in the constructor are:
+   * - smaller radious
+   * - bigger radious
+   * - smaller angle (in the cylindrical coordinate system)
+   * - bigger angle (in the cylindrical coordinate system)
+   * - initial z-coordinate of the element
+   * - z-length of the element
+   * - name
+   */
   block
       (
           double r1, //lower radious

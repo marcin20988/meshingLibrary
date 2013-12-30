@@ -7,11 +7,31 @@
 namespace meshing
 {
 
-
+/**
+ * \brief
+ * simple elements defined in cylindrical coordinate system
+ */
 class cylinder: public element
 {
     //create a rounded trapezoid (rounded on outer side only or both sides)
  public:
+  /**
+   * \brief
+   * hexahedron created between two radii and angles and rounder on one or two
+   * sides (element of a ring)
+   *
+   * parameters given in the constructor are:
+   * - smaller radious
+   * - bigger radious
+   * - smaller angle (in the cylindrical coordinate system)
+   * - bigger angle (in the cylindrical coordinate system)
+   * - initial z-coordinate of the element
+   * - z-length of the element
+   * - rounding {oneSided, twoSided}
+   * - curvature radious of the inner wall (if negative lower radious wille be
+   *   used)
+   * - name
+   */
   cylinder 
       (
           double r1, //lower radious
@@ -25,7 +45,17 @@ class cylinder: public element
           std::string name = "roundedTrapezoid"
       );
 
-  //create a rounded box
+  /**
+   * \brief
+   * square-based hexahedron with rounded sides (for pipe::oType)
+   *
+   * parameters given in the constructor are:
+   * - starting point of the element
+   * - x-width and y-width (square based element)
+   * - z-width
+   * - curvature radious
+   * - name
+   */
   cylinder 
       (
           point p1, //starting point

@@ -4,11 +4,34 @@
 namespace meshing
 {
 
+/**
+ * \brief
+ * namespace gathering pipe-like elements
+ */
 namespace pipe
 {
+/**
+ * \brief
+ * O-Type pipe
+ */
 class oType: public multiElement
 {
  public:
+  /**
+   * \brief
+   * create O-Type pipe element (pipe will be aligned along z-axis in the
+   * cylindrical coordinate system)
+   *
+   * parameters given in the constructor:
+   * - length of pipe (in the z-direction)
+   * - pipe radious
+   * - initial z coordinate of the element
+   * - size of the square-based hexahedron in the center (this is relative to
+   *   the pipe radious so choose between 0 and 1!)
+   * - radious of above square's rounding (also relative to the pipe radious)
+   * - rounding of the elements around inner hexahedron (should be 'twoSided')
+   * - name
+   */
     oType
         (
             double length,
@@ -20,6 +43,15 @@ class oType: public multiElement
             std::string name = "oType-pipe"
         );
   
+    /**
+     * \brief
+     * number of cells in r, theta and z directions
+     *
+     * Inner hexahedron is given nTheta / 4 cells in x and y directions to be
+     * consistent with sorounding elements.
+     * Cells in radial direction are distributed to the elements around inner
+     * hex. 
+     */
     void nCell(int nR, int nTheta, int nZ)
     {
         elements_[0] -> nCell(nTheta / 4, nTheta / 4, nZ);
@@ -32,12 +64,30 @@ class oType: public multiElement
 };
 
 
-
+/**
+ * \brief
+ * ring element
+ */
 class ring : public multiElement
 {
  protected: 
   int nSegments_;
  public:
+  /**
+   * \brief
+   * create a ring element (will be aligned along z-axis in the
+   * cylindrical coordinate system)
+   *
+   * parameters given in the constructor:
+   * - length of the ring (in the z-direction)
+   * - ring inner radious
+   * - ring outer radious
+   * - initial z coordinate of the element
+   * - number of elements constituting to the ring (from how many rounded hexes
+   *   ring is actualy created)
+   * - initial theta-coordinate of the first hex 
+   * - name
+   */
   ring
       (
           double length,
@@ -49,6 +99,11 @@ class ring : public multiElement
           std::string name = "ring"
       );
     
+  /**
+   * \brief
+   *
+   * number of cells in r, theta and z direction
+   */
   void nCell(int nR, int nTheta, int nZ)
     {
         for(int i=0; i<4; i++)
@@ -60,7 +115,10 @@ class ring : public multiElement
 };
 
 
-
+/**
+ * \brief
+ * pipe with an orifice section
+ */
 class restrictedPipe: public multiElement
 {
  protected:
@@ -72,6 +130,26 @@ class restrictedPipe: public multiElement
   double a_;
 
  public:
+  /**
+   * \brief
+   * create a restricted pipe element
+   *
+   * Element constitute from 3 oType pipe sections (one preceeding the orifice,
+   * orifice section and one succeeding the orifice) and two ring elements
+   * located around oType pipes in the pre- and succeeding sections
+   * parameters given in the constructor:
+   * - length of pipe (in the z-direction)
+   * - orifice radious
+   * - pipe radious
+   * - z-coordinate of the restriction (relative to the pipe inlet)
+   * - lenght of the restriction (in the z-direction)
+   * - initial z coordinate of the whole element
+   * - size of the square-based hexahedron in the center (this is relative to
+   *   the orifice radious so choose between 0 and 1!)
+   * - radious of above square's rounding (also relative to the orifice radious)
+   * - rounding of the elements around inner hexahedron (should be 'twoSided')
+   * - name
+   */
   restrictedPipe 
       (
           double length,
@@ -86,6 +164,13 @@ class restrictedPipe: public multiElement
           std::string name = "restrictedPipe"
       );
   
+  /**
+   * \brief
+   * set mesh grading in z direction for 3 segments of the pipe
+   *
+   * Element constitute from pipe sections one preceeding the orifice,
+   * orifice section and one succeeding the orifice
+   */
   void nGrading(double n1, double n2, double n3)
     {
         //first oType
@@ -100,6 +185,10 @@ class restrictedPipe: public multiElement
         elements_[4] -> nGrading(1, 1, n3);
     };
 
+  /**
+   * \brief
+   * set number of cells in r, theta, and z direction
+   */
   void nCell(int nR, int nTheta, int nZ)
     {
         int nz1 = nZ * z1_ / l_;
@@ -121,6 +210,13 @@ class restrictedPipe: public multiElement
         elements_[4] -> nCell(nR2, nTheta , nz3);
     };
 
+  /**
+   * \brief
+   * set number of cells in r,theta and z direction for 3 segments of the pipe
+   *
+   * Element constitute from pipe sections one preceeding the orifice,
+   * orifice section and one succeeding the orifice
+   */
   void nCell(int nR, int nTheta, int nZ1, int nZ2, int nZ3)
   {
         double r2 = (1 - a_) * r_;
