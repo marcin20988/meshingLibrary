@@ -1,5 +1,3 @@
-#ifndef block_H
-#define block_H
 #include "mesh.H"
 #include <iostream>
 
@@ -370,5 +368,4 @@ void mesh::separateFromPatch
 
 
 }//end namespace meshing
-#endif
 

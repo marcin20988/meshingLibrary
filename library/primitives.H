@@ -97,7 +97,7 @@ class face
    * \brief
    * returns string in format \t\t( int int int int)\n
    */
-  std::string write();
+  std::string write() const;
 
   int label(const int i) const
   {
@@ -295,6 +295,18 @@ class patch
 
     /**
      * \brief
+     * remove face with a given label from patch
+     */
+    void removeFace(int label);
+
+    /**
+     * \brief
+     * remove given face from patch
+     */
+    void removeFace(const face);
+
+    /**
+     * \brief
      * return string formated as a single patch entry for blockMeshDict
      */
     std::string write();
@@ -303,7 +315,17 @@ class patch
     {
         return name_;
     };
-  
+ 
+    const face * faceList() const
+    {
+        return faceList_;
+    };
+
+    int faceN() const
+    {
+        return numberOfFaces_;
+    };
+ 
     /**
      * \brief
      * remove internal faces from patch
