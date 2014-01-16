@@ -4,8 +4,8 @@ namespace meshing
 //trapezoid element in a ring between two radii (and two andgles)
 cylinder::cylinder
 (
-    double r1, //lower radious
-    double r2, //greater radious
+    double r1, //lower radius
+    double r2, //greater radius
     double alpha1, //smaller angle
     double alpha2, //bigger angle
     double initialZ, //length in z-direction
@@ -132,7 +132,7 @@ cylinder::cylinder
     point p1, //starting point
     double a, //cube x-width
     double c, //cube z-width
-    double r, //rounding radious
+    double r, //rounding radius
     std::string name
 )
     :

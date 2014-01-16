@@ -19,14 +19,14 @@ int main(){
     pipe::restrictedPipe element1
     (
         100.0,         // length of the whole pipe
-        0.75,      // radious of the restricted section
-        1.5,       // pipe radious
+        0.75,      // radius of the restricted section
+        1.5,       // pipe radius
         40,         // location (from the begining of pipe) of the restriction
         0.5,       // restriction length
         //below are argument with default values
         -40,        // z-coordinate of the pipe inlet (default is 0.0)
-        0.4,         // size of the inner square for the O-Type mesh relative to the restriction radious (default is 0.2) 
-        0.44        // radious of the arcs rounding the inner square (default is 0.22)
+        0.4,         // size of the inner square for the O-Type mesh relative to the restriction radius (default is 0.2) 
+        0.44        // radius of the arcs rounding the inner square (default is 0.22)
         //rounding = twoSided   //are the outside element rounded {OneSided, TwoSided}
         //std::string name = "restrictedPipe" //name of the element 
     );
