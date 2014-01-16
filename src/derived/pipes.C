@@ -188,72 +188,72 @@ restrictedPipe::restrictedPipe
     rounding rnd,
     std::string name
 ):
-multiElement(5,name)
+    multiElement(5,name),
+    l_(length),
+    r_(radius),
+    R_(pipeRadius),
+    z1_(restrictionLocation),
+    z2_(restrictionLength),
+    a_(squareSize)
 {
-    l_ = length;
-    r_ = radius;
-    R_ = pipeRadius;
-    z1_ = restrictionLocation;
-    z2_ = restrictionLength;
-    a_ = squareSize;
 
     elements_[0] = new oType
-        (
-            restrictionLocation,
-            radius,
-            initialZ,
-            squareSize,
-            squareRadius,
-            rnd,
-            "oType1"
-        );
+    (
+        restrictionLocation,
+        radius,
+        initialZ,
+        squareSize,
+        squareRadius,
+        rnd,
+        "oType1"
+    );
 
     elements_[1] = new ring
-        (
-            restrictionLocation,
-            radius,
-            pipeRadius,
-            initialZ,
-            4,
-            M_PI / 4.0,
-            "ring1" 
-        );
+    (
+        restrictionLocation,
+        radius,
+        pipeRadius,
+        initialZ,
+        4,
+        M_PI / 4.0,
+        "ring1" 
+    );
 
     elements_[2] = new oType
-        (
-            restrictionLength,
-            radius,
-            initialZ + restrictionLocation,
-            squareSize,
-            squareRadius,
-            rnd,
-            "oType2"
-        );
+    (
+        restrictionLength,
+        radius,
+        initialZ + restrictionLocation,
+        squareSize,
+        squareRadius,
+        rnd,
+        "oType2"
+    );
     double z = restrictionLocation + restrictionLength;
     double l = length - z;
     double iZ = initialZ + z;
 
     elements_[3] = new oType
-        (
-            l,
-            radius,
-            iZ,
-            squareSize,
-            squareRadius,
-            rnd,
-            "oType2"
-        );
+    (
+        l,
+        radius,
+        iZ,
+        squareSize,
+        squareRadius,
+        rnd,
+        "oType2"
+    );
 
     elements_[4] = new ring
-        (
-            l,
-            radius,
-            pipeRadius,
-            iZ,
-            4,
-            M_PI / 4.0,
-            "ring2" 
-        );
+    (
+        l,
+        radius,
+        pipeRadius,
+        iZ,
+        4,
+        M_PI / 4.0,
+        "ring2" 
+    );
 
 };
 
