@@ -1,3 +1,0 @@
-1) avoid adding internal faces to patches
-solution: if face on the list has the same set of labels that another face it is
-an internal face and BOTH OF THEM should be removed from the list

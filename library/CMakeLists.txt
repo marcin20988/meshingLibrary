@@ -4,5 +4,6 @@ file(GLOB lib_source_files
 )
 
 add_library(meshingLib SHARED ${lib_source_files})
-set_target_properties (meshingLib PROPERTIES LIBRARY_OUTPUT_DIRECTORY "${PROJECT_SOURCE_DIR}")
+set_target_properties (meshingLib PROPERTIES LIBRARY_OUTPUT_DIRECTORY
+    "${PROJECT_SOURCE_DIR}/lib")
 

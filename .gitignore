@@ -2,3 +2,5 @@
 build
 primitives
 doxygen
+bin
+lib

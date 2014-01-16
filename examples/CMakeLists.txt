@@ -8,8 +8,8 @@ target_link_libraries(restriction meshingLib)
 target_link_libraries(pig meshingLib)
 
 set_target_properties (restriction PROPERTIES RUNTIME_OUTPUT_DIRECTORY
-    "${PROJECT_SOURCE_DIR}/execs")
+    "${PROJECT_SOURCE_DIR}/bin")
 
 set_target_properties (pig PROPERTIES RUNTIME_OUTPUT_DIRECTORY
-    "${PROJECT_SOURCE_DIR}/execs")
+    "${PROJECT_SOURCE_DIR}/bin")
 
