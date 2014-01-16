@@ -18,14 +18,14 @@ int main(){
     //create restrictionMesh object
     pipe::pig element1
     (
-        1.0,         // length of the whole pipe
-        0.0075,      // radius of the restricted section
-        0.015,       // pipe radius
-        0.4,         // location (from the begining of pipe) of the restriction
-        0.005,       // restriction length
+        2.66,         // length of the whole pipe
+        0.00381,      // radius of the restricted section
+        0.0381,       // pipe radius
+        0.3,         // location (from the begining of pipe) of the restriction
+        0.0762,       // restriction length
         0.01,        // length of the wax-injection area
         //below are argument with default values
-        -0.4,        // z-coordinate of the pipe inlet (default is 0.0)
+        0,        // z-coordinate of the pipe inlet (default is 0.0)
         0.4,         // size of the inner square for the O-Type mesh relative to the restriction radius (default is 0.2) 
         0.44        // radius of the arcs rounding the inner square (default is 0.22)
         //rounding = twoSided   //are the outside element rounded {OneSided, TwoSided}
@@ -38,7 +38,7 @@ int main(){
     //nZ1 - for elements preceeding the restriction
     //nZ2 -  for restriction
     //nZ3 -  for elements succeeding the restriction
-    element1.nCell(20, 20, 80, 6, 130);
+    element1.nCell(20, 20, 80, 6, 230);
 
     //grading (for this element it is only in z-direction for three distinctive
     //parts of the geometry

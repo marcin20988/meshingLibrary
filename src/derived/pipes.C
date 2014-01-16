@@ -15,7 +15,7 @@ oType::oType
     rounding,
     std::string name
 ):
-    multiElement(5,name)
+    multiElement(5, name)
 {
     double r = 2.0 / sqrt(2.0) * squareRadius * radius;
     double a = 2.0 / sqrt(2.0) * squareSize * radius;
@@ -24,16 +24,17 @@ oType::oType
     elements_[0] = 
         new cylinder
         (
-            point( - a / 2.0 , - a / 2.0 , initialZ ),
+            point( -a / 2.0 , -a / 2.0 , initialZ ),
             a,
             length,
             r
         );
 
-    for(int i=0; i<4; i++){
+    for(int i = 0; i < 4; i++){
         float alpha1 = (i + 0.5) * 2.0 * M_PI / 4.0;
-        float alpha2 = (i+1.5) * 2.0 * M_PI / 4.0;
-        elements_[i+1] = new cylinder
+        float alpha2 = (i + 1.5) * 2.0 * M_PI / 4.0;
+        elements_[i+1] = 
+            new cylinder
             (
                 sqrt(2) * 0.5 * a,
                 radius,
@@ -123,7 +124,8 @@ segmentedOType::segmentedOType
         {
             prevL = segmentsZ[i - 1];
         }
-        elements_[i] = new oType
+        elements_[i] = 
+            new oType
             (
                 segmentsZ[i] - prevL,
                 radius,
