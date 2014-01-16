@@ -1,7 +1,7 @@
 add_executable(restriction restriction.C)
 add_executable(pig pig.C)
 
-include_directories("${PROJECT_SOURCE_DIR}/library")
+include_directories("${PROJECT_SOURCE_DIR}/src")
 include_directories("${PROJECT_SOURCE_DIR}")
 
 target_link_libraries(restriction meshingLib)
