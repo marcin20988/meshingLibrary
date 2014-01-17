@@ -465,7 +465,7 @@ void patch::removeFace(const face target)
 std::string patch::write()
 {
     std::string a="\t";
-    switch (type_)
+    /*switch (type_)
     {
         case p:
             a += "patch ";
@@ -473,16 +473,35 @@ std::string patch::write()
         case w:
             a+= "wall ";
             break;
+        case e:
+            a+= "empty ";
+            break;
     }
     
-    a += name_ + "\n\t(\n";
+    a += name_ + "\n\t(\n";*/
+
+    a += name_ +"\n\t{\n";
+    a += "\ttype ";
+    switch (type_)
+    {
+        case p:
+            a += "patch;\n";
+            break;
+        case w:
+            a+= "wall;\n";
+            break;
+        case e:
+            a+= "empty;\n";
+            break;
+    }
+    a += "\tfaces\n\t(\n";
 
     for(int i=0; i<numberOfFaces_; i++)
     {
         a+= faceList_[i].write();
     }
 
-    a += "\t)\n\n";
+    a += "\t);\n\t}\n\n";
     return a;
 };
 

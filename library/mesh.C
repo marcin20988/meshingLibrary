@@ -106,7 +106,8 @@ void mesh::write()
     for(int i=0; i<numberOfPatches_; i++){
         boundaries += patchList_[i].write();
     }
-    blockMeshFile_ << "patches\n(\n" << boundaries << ");\n\n";
+    //blockMeshFile_ << "patches\n(\n" << boundaries << ");\n\n";
+    blockMeshFile_ << "boundary\n(\n" << boundaries << ");\n\n";
 }
 
 std::string mesh::header()

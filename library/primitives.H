@@ -31,9 +31,9 @@ enum coordinate {x,y,z,r,theta};
 
 /**
  * \brief
- * w - wall; p - patch
+ * w - wall; p - patch; e-empty
  */
-enum patchType {w, p};
+enum patchType {w, p, e};
 
 /**
  * \brief
