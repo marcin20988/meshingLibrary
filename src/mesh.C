@@ -74,7 +74,8 @@ void mesh::write()
     for(int i=0; i<numberOfVertices_;  i++){
         blockMeshFile_ << "\t(" << verticesList_[i].x() << " ";
         blockMeshFile_ << verticesList_[i].y() << " ";
-        blockMeshFile_ << verticesList_[i].z() << " )\n";
+        blockMeshFile_ << verticesList_[i].z() << " )"
+            << " //" << i << "\n";
     }
     blockMeshFile_ << ");\n\n";
 
