@@ -8,35 +8,36 @@ namespace pipe
 oType::oType
 (
     double length,
-    double radious,
+    double radius,
     double initialZ,
-    double squareSize, //relative to the pipe radious!
-    double squareRadious, //relative to the pipe radious
+    double squareSize, //relative to the pipe radius!
+    double squareRadius, //relative to the pipe radius
     rounding,
     std::string name
 ):
-    multiElement(5,name)
+    multiElement(5, name)
 {
-    double r = 2.0 / sqrt(2.0) * squareRadious * radious;
-    double a = 2.0 / sqrt(2.0) * squareSize * radious;
+    double r = 2.0 / sqrt(2.0) * squareRadius * radius;
+    double a = 2.0 / sqrt(2.0) * squareSize * radius;
 
 
     elements_[0] = 
         new cylinder
         (
-            point( - a / 2.0 , - a / 2.0 , initialZ ),
+            point( -a / 2.0 , -a / 2.0 , initialZ ),
             a,
             length,
             r
         );
 
-    for(int i=0; i<4; i++){
+    for(int i = 0; i < 4; i++){
         float alpha1 = (i + 0.5) * 2.0 * M_PI / 4.0;
-        float alpha2 = (i+1.5) * 2.0 * M_PI / 4.0;
-        elements_[i+1] = new cylinder
+        float alpha2 = (i + 1.5) * 2.0 * M_PI / 4.0;
+        elements_[i+1] = 
+            new cylinder
             (
                 sqrt(2) * 0.5 * a,
-                radious,
+                radius,
                 alpha1,
                 alpha2,
                 initialZ,
@@ -51,8 +52,8 @@ oType::oType
 segmentedRing::segmentedRing
 (
     double length,
-    double innerRadious,
-    double outerRadious,
+    double innerRadius,
+    double outerRadius,
     int nSegmentsZ,
     double * segmentEnds,
     double initialZ,
@@ -81,8 +82,8 @@ segmentedRing::segmentedRing
         elements_[i] = new ring
             (
                 segmentEnds[i] - prevL,
-                innerRadious,
-                outerRadious,
+                innerRadius,
+                outerRadius,
                 iZ,
                 numberOfSegments,
                 deltaAlpha,
@@ -96,12 +97,12 @@ segmentedRing::segmentedRing
 segmentedOType::segmentedOType
 (
     double length,
-    double radious,
+    double radius,
     int segmentsN,
     double * segmentsZ,
     double initialZ,
-    double squareSize, //relative to the pipe radious!
-    double squareRadious, //relative to the pipe radious
+    double squareSize, //relative to the pipe radius!
+    double squareRadius, //relative to the pipe radius
     rounding rnd,
     std::string name
 ):
@@ -123,13 +124,14 @@ segmentedOType::segmentedOType
         {
             prevL = segmentsZ[i - 1];
         }
-        elements_[i] = new oType
+        elements_[i] = 
+            new oType
             (
                 segmentsZ[i] - prevL,
-                radious,
+                radius,
                 iZ,
                 squareSize,
-                squareRadious,
+                squareRadius,
                 rnd,
                 name
             );
@@ -142,8 +144,8 @@ segmentedOType::segmentedOType
 ring::ring
 (
     double length,
-    double innerRadious,
-    double outerRadious,
+    double innerRadius,
+    double outerRadius,
     double initialZ,
     int numberOfSegments,
     double deltaAlpha,
@@ -158,8 +160,8 @@ multiElement(numberOfSegments,name)
         float alpha2 = deltaAlpha + (i+1.0) * 2.0 * M_PI / numberOfSegments;
         elements_[i] = new cylinder
             (
-                innerRadious,
-                outerRadious,
+                innerRadius,
+                outerRadius,
                 alpha1,
                 alpha2,
                 initialZ,
@@ -178,82 +180,82 @@ multiElement(numberOfSegments,name)
 restrictedPipe::restrictedPipe
 (
     double length,
-    double radious,
-    double pipeRadious,
+    double radius,
+    double pipeRadius,
     double restrictionLocation, //from the begining of pipe
     double restrictionLength,
     double initialZ,
-    double squareSize, //relative to the pipe radious!
-    double squareRadious, //relative to the pipe radious
+    double squareSize, //relative to the pipe radius!
+    double squareRadius, //relative to the pipe radius
     rounding rnd,
     std::string name
 ):
-multiElement(5,name)
+    multiElement(5,name),
+    l_(length),
+    r_(radius),
+    R_(pipeRadius),
+    z1_(restrictionLocation),
+    z2_(restrictionLength),
+    a_(squareSize)
 {
-    l_ = length;
-    r_ = radious;
-    R_ = pipeRadious;
-    z1_ = restrictionLocation;
-    z2_ = restrictionLength;
-    a_ = squareSize;
 
     elements_[0] = new oType
-        (
-            restrictionLocation,
-            radious,
-            initialZ,
-            squareSize,
-            squareRadious,
-            rnd,
-            "oType1"
-        );
+    (
+        restrictionLocation,
+        radius,
+        initialZ,
+        squareSize,
+        squareRadius,
+        rnd,
+        "oType1"
+    );
 
     elements_[1] = new ring
-        (
-            restrictionLocation,
-            radious,
-            pipeRadious,
-            initialZ,
-            4,
-            M_PI / 4.0,
-            "ring1" 
-        );
+    (
+        restrictionLocation,
+        radius,
+        pipeRadius,
+        initialZ,
+        4,
+        M_PI / 4.0,
+        "ring1" 
+    );
 
     elements_[2] = new oType
-        (
-            restrictionLength,
-            radious,
-            initialZ + restrictionLocation,
-            squareSize,
-            squareRadious,
-            rnd,
-            "oType2"
-        );
+    (
+        restrictionLength,
+        radius,
+        initialZ + restrictionLocation,
+        squareSize,
+        squareRadius,
+        rnd,
+        "oType2"
+    );
     double z = restrictionLocation + restrictionLength;
     double l = length - z;
     double iZ = initialZ + z;
 
     elements_[3] = new oType
-        (
-            l,
-            radious,
-            iZ,
-            squareSize,
-            squareRadious,
-            rnd,
-            "oType2"
-        );
+    (
+        l,
+        radius,
+        iZ,
+        squareSize,
+        squareRadius,
+        rnd,
+        "oType2"
+    );
 
     elements_[4] = new ring
-        (
-            l,
-            radious,
-            pipeRadious,
-            iZ,
-            4,
-            M_PI / 4.0,
-            "ring2" 
-        );
+    (
+        l,
+        radius,
+        pipeRadius,
+        iZ,
+        4,
+        M_PI / 4.0,
+        "ring2" 
+    );
 
 };
 
@@ -261,27 +263,27 @@ multiElement(5,name)
 pig::pig
 (
     double length,
-    double radious,
-    double pipeRadious,
+    double radius,
+    double pipeRadius,
     double restrictionLocation, //from the begining of pipe
     double restrictionLength,
     double waxInletLength,
     double initialZ,
-    double squareSize, //relative to the pipe radious!
-    double squareRadious, //relative to the pipe radious
+    double squareSize, //relative to the pipe radius!
+    double squareRadius, //relative to the pipe radius
     rounding rnd,
     std::string name
 ):
     restrictedPipe
     (
         length,
-        radious,
-        pipeRadious,
+        radius,
+        pipeRadius,
         restrictionLocation,
         restrictionLength,
         initialZ,
         squareSize,
-        squareRadious,
+        squareRadius,
         rnd,
         name
     )
@@ -294,12 +296,12 @@ pig::pig
     elements_[3] = new segmentedOType
         (
             l,
-            radious,
+            radius,
             2,
             zPipe,
             iZ,
             squareSize,
-            squareRadious,
+            squareRadius,
             rnd,
             "oType2"
         );
@@ -307,8 +309,8 @@ pig::pig
     elements_[4] = new segmentedRing
         (
             l,
-            radious,
-            pipeRadious,
+            radius,
+            pipeRadius,
             2,
             zPipe,
             iZ,

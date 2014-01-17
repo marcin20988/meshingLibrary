@@ -24,18 +24,18 @@ class oType: public multiElement
    *
    * parameters given in the constructor:
    * - length of pipe (in the z-direction)
-   * - pipe radious
+   * - pipe radius
    * - initial z coordinate of the element
    * - size of the square-based hexahedron in the center (this is relative to
-   *   the pipe radious so choose between 0 and 1!)
-   * - radious of above square's rounding (also relative to the pipe radious)
+   *   the pipe radius so choose between 0 and 1!)
+   * - radius of above square's rounding (also relative to the pipe radius)
    * - rounding of the elements around inner hexahedron (should be 'twoSided')
    * - name
    */
     oType
         (
             double length,
-            double radious,
+            double radius,
             double initialZ = 0.0,
             double squareSize = 0.2,
             double squareRadious = 0.22,
@@ -95,7 +95,7 @@ class segmentedOType: public multiElement
     segmentedOType
         (
             double length,
-            double radious,
+            double radius,
             int segmentsN,
             double * segmentsZ,
             double initialZ = 0.0,
@@ -150,8 +150,8 @@ class ring : public multiElement
    *
    * parameters given in the constructor:
    * - length of the ring (in the z-direction)
-   * - ring inner radious
-   * - ring outer radious
+   * - ring inner radius
+   * - ring outer radius
    * - initial z coordinate of the element
    * - number of elements constituting to the ring (from how many rounded hexes
    *   ring is actualy created)
@@ -254,21 +254,21 @@ class restrictedPipe: public multiElement
    * located around oType pipes in the pre- and succeeding sections
    * parameters given in the constructor:
    * - length of pipe (in the z-direction)
-   * - orifice radious
-   * - pipe radious
+   * - orifice radius
+   * - pipe radius
    * - z-coordinate of the restriction (relative to the pipe inlet)
    * - lenght of the restriction (in the z-direction)
    * - initial z coordinate of the whole element
    * - size of the square-based hexahedron in the center (this is relative to
-   *   the orifice radious so choose between 0 and 1!)
-   * - radious of above square's rounding (also relative to the orifice radious)
+   *   the orifice radius so choose between 0 and 1!)
+   * - radius of above square's rounding (also relative to the orifice radius)
    * - rounding of the elements around inner hexahedron (should be 'twoSided')
    * - name
    */
   restrictedPipe 
       (
           double length,
-          double radious,
+          double radius,
           double pipeRadious,
           double restrictionLocation,
           double restrictionLength,
@@ -376,22 +376,22 @@ class pig: public restrictedPipe
    * located around oType pipes in the pre- and succeeding sections
    * parameters given in the constructor:
    * - length of pipe (in the z-direction)
-   * - orifice radious
-   * - pipe radious
+   * - orifice radius
+   * - pipe radius
    * - z-coordinate of the restriction (relative to the pipe inlet)
    * - lenght of the restriction (in the z-direction)
    * - wax inlet length in z direction (will be placed right after the orifice)
    * - initial z coordinate of the whole element
    * - size of the square-based hexahedron in the center (this is relative to
-   *   the orifice radious so choose between 0 and 1!)
-   * - radious of above square's rounding (also relative to the orifice radious)
+   *   the orifice radius so choose between 0 and 1!)
+   * - radius of above square's rounding (also relative to the orifice radius)
    * - rounding of the elements around inner hexahedron (should be 'twoSided')
    * - name
    */
   pig 
       (
           double length,
-          double radious,
+          double radius,
           double pipeRadious,
           double restrictionLocation,
           double restrictionLength,
