@@ -52,23 +52,23 @@ int main(){
     M.addPatch
         (
             z,          // choose coordinate for placing a patch {x,y,z,r,theta}
-            -0.4,        //value of the coordinate (all faces with z=0.0 will be added to patch)
+            0.0,        //value of the coordinate (all faces with z=0.0 will be added to patch)
             "inlet",    //patch name
             p           // patch type {p for patch, w for wall} // default is p
         );
     
-    M.addPatch(z, 0.6, "outlet", p);
-    M.addPatch(r, 0.015, "walls", w);
+    M.addPatch(z, 2.66, "outlet", p);
+    M.addPatch(r, 0.0381, "walls", w);
 
     //will separate part of the patch "walls" and create new patch "waxInlet"
-    M.separateFromPatch("walls", z, 0.005, 0.015, "waxInlet",p);
+    M.separateFromPatch("walls", z, 0.3762, 0.3862, "waxInlet",p);
 
     //add face for existing patch;
     //internal faces will be automaticaly removed from the patch so patch plance
     //can intersect mesh
-    M.addToPatch(z, 0.0, "walls");
-    M.addToPatch(z, 0.005, "walls");
-    M.addToPatch(r, 0.0075, "walls");
+    M.addToPatch(z, 0.3, "walls");
+    M.addToPatch(z, 0.3762, "walls");
+    M.addToPatch(r, 0.00381, "walls");
 
     //create blockMeshDict for given geometry
     M.write();
