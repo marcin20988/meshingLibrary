@@ -50,8 +50,8 @@ class block:public element{
    * hexahedron created between two radii and angles
    *
    * parameters given in the constructor are:
-   * - smaller radious
-   * - bigger radious
+   * - smaller radius
+   * - bigger radius
    * - smaller angle (in the cylindrical coordinate system)
    * - bigger angle (in the cylindrical coordinate system)
    * - initial z-coordinate of the element
@@ -60,8 +60,8 @@ class block:public element{
    */
   block
       (
-          double r1, //lower radious
-          double r2, //greater radious
+          double r1, //lower radius
+          double r2, //greater radius
           double alpha1, //smaller angle
           double alpha2, //bigger angle
           double initialZ, //length in z-direction

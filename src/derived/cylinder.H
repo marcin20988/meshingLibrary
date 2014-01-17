@@ -21,21 +21,21 @@ class cylinder: public element
    * sides (element of a ring)
    *
    * parameters given in the constructor are:
-   * - smaller radious
-   * - bigger radious
+   * - smaller radius
+   * - bigger radius
    * - smaller angle (in the cylindrical coordinate system)
    * - bigger angle (in the cylindrical coordinate system)
    * - initial z-coordinate of the element
    * - z-length of the element
    * - rounding {oneSided, twoSided}
-   * - curvature radious of the inner wall (if negative lower radious wille be
+   * - curvature radius of the inner wall (if negative lower radius wille be
    *   used)
    * - name
    */
   cylinder 
       (
-          double r1, //lower radious
-          double r2, //greater radious
+          double r1, //lower radius
+          double r2, //greater radius
           double alpha1, //smaller angle
           double alpha2, //bigger angle
           double initialZ, //length in z-direction
@@ -53,7 +53,7 @@ class cylinder: public element
    * - starting point of the element
    * - x-width and y-width (square based element)
    * - z-width
-   * - curvature radious
+   * - curvature radius
    * - name
    */
   cylinder 
@@ -61,7 +61,7 @@ class cylinder: public element
           point p1, //starting point
           double a, //cube x-width
           double c, //cube z-width
-          double r, //rounding radious
+          double r, //rounding radius
           std::string name="box"
       );
 

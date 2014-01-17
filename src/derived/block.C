@@ -64,8 +64,8 @@ block::block
 //trapezoid element in a ring between two radii (and two andgles)
 block::block
 (
-    double r1, //lower radious
-    double r2, //greater radious
+    double r1, //lower radius
+    double r2, //greater radius
     double alpha1, //smaller angle
     double alpha2, //bigger angle
     double initialZ, //length in z-direction
