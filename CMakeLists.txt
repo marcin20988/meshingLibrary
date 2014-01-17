@@ -15,14 +15,14 @@ endif()
 enable_testing()
 
 #General includes required by all code
-include_directories ("${PROJECT_SOURCE_DIR}/library")
-include_directories ("${PROJECT_SOURCE_DIR}/library/derived")
+include_directories ("${PROJECT_SOURCE_DIR}/src")
+include_directories ("${PROJECT_SOURCE_DIR}/src/derived")
 
 #We need to tell CMake to use use C files as CXX (OpenFOAM standard)
 set_source_files_properties(filename.c PROPERTIES LANGUAGE CXX )
 
 #Library
-add_subdirectory(library)
+add_subdirectory(src)
 add_subdirectory(testing)
 add_subdirectory(examples)
 
