@@ -1,0 +1,10 @@
+[_] % Code
+	[_] avoid adding internal faces to patches
+	:solution: if face on the list has the same set of labels that another
+	:face it is an internal face and BOTH OF THEM should be removed from the
+	:list
+	[_] Add extensive support for spline
+	:Under current conditions this is the only way to solve pig meshing
+	:problem.
+[_] % Infrastructure
+	[ ] Add installation rules to CMake
