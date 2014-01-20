@@ -67,6 +67,23 @@ class cylinder: public element
 
 };
 
+class expandingCylinder: public element
+{
+ public:
+  expandingCylinder
+      (
+          point p1, //starting point
+          double a1, //cube x-width
+          double r1, //rounding radius
+          double a2, //cube x-width
+          double r2, //rounding radius
+          double c, //cube z-width
+          std::string name="box"
+      );
+};
+
 }//end namespace meshing
+
+
 #endif
 
