@@ -83,9 +83,22 @@ int main(){
           2.2,//double r2, //rounding radius
           3.0//double c, //cube z-width
         );
-    expPipe.nCell(10,20,5);
+    //expPipe.nCell(10,20,5);
+    
+    pipe::oTypeExpanding expanding
+        (
+            1.0,
+            0.5,
+            1.75,
+            0.0,
+            0.2,
+            0.22
+        );
+    expanding.nCell(10,20,5);
+
     mesh M;
-    M.addElement(expPipe);
+    M.addElement(expanding);
+    //M.addElement(expPipe);
     //M.addElement(block1);
     //M.addElement(cylinder1);
 

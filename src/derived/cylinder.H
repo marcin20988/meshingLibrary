@@ -80,6 +80,23 @@ class expandingCylinder: public element
           double c, //cube z-width
           std::string name="box"
       );
+
+  expandingCylinder
+      (
+          double r1, //lower radius
+          double r2, //greater radius
+          double r1_2, //lower radius
+          double r2_2, //greater radius
+          double alpha1, //smaller angle
+          double alpha2, //bigger angle
+          double initialZ, //length in z-direction
+          double zLength, //length in z-direction
+          rounding rnd = oneSided,
+          double innerR = -1,
+          std::string name = "roundedTrapezoid"
+      );
+
+
 };
 
 }//end namespace meshing
