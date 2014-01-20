@@ -74,9 +74,33 @@ int main(){
             1.0
         );*/
 
+    expandingCylinder expPipe
+        (
+          point(0.0,0.0,0.0),
+          1.0,//double a1, //cube x-width
+          1.1,//double r1, //rounding radius
+          2.0,//double a2, //cube x-width
+          2.2,//double r2, //rounding radius
+          3.0//double c, //cube z-width
+        );
+    //expPipe.nCell(10,20,5);
+    
+    pipe::oTypeExpanding expanding
+        (
+            1.0,
+            0.5,
+            1.75,
+            0.0,
+            0.2,
+            0.22
+        );
+    expanding.nCell(10,20,5);
+
     mesh M;
+    M.addElement(expanding);
+    //M.addElement(expPipe);
     //M.addElement(block1);
-    M.addElement(cylinder1);
+    //M.addElement(cylinder1);
 
 //    M.addPatch(x,0.0,"wall1");
 //    M.addToPatch(x,1.0,"wall1");
@@ -84,9 +108,9 @@ int main(){
 //    M.addPatch(y,0.0,"wall2",w);
 //    M.addToPatch(y,2.0,"wall2");
     
-    constant::tolerance = 1e-03;
+    //constant::tolerance = 1e-03;
     //M.addPatch(r,3.0,"roundWall1",w);
-    M.addPatch(theta,0,"roundWall2",w);
+    //M.addPatch(theta,0,"roundWall2",w);
    // M.addElement(pipe1);
 
     M.write();

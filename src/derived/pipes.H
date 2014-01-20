@@ -63,6 +63,57 @@ class oType: public multiElement
 
 };
 
+class oTypeExpanding: public multiElement
+{
+ public:
+  /**
+   * \brief
+   * create O-Type pipe element (pipe will be aligned along z-axis in the
+   * cylindrical coordinate system)
+   *
+   * parameters given in the constructor:
+   * - length of pipe (in the z-direction)
+   * - pipe radius
+   * - initial z coordinate of the element
+   * - size of the square-based hexahedron in the center (this is relative to
+   *   the pipe radius so choose between 0 and 1!)
+   * - radius of above square's rounding (also relative to the pipe radius)
+   * - rounding of the elements around inner hexahedron (should be 'twoSided')
+   * - name
+   */
+    oTypeExpanding
+        (
+            double length,
+            double radius,
+            double radius2,
+            double initialZ = 0.0,
+            double squareSize = 0.2,
+            double squareRadious = 0.22,
+            rounding = twoSided,
+            std::string name = "oType-pipe"
+        );
+  
+    /**
+     * \brief
+     * number of cells in r, theta and z directions
+     *
+     * Inner hexahedron is given nTheta / 4 cells in x and y directions to be
+     * consistent with sorounding elements.
+     * Cells in radial direction are distributed to the elements around inner
+     * hex. 
+     */
+    void nCell(int nR, int nTheta, int nZ)
+    {
+        elements_[0] -> nCell(nTheta / 4, nTheta / 4, nZ);
+        for(int i=0; i<4; i++)
+        {
+            elements_[i+1] -> nCell(nR, nTheta / 4, nZ);
+        }
+    };
+
+};
+
+
 /**
  * \brief
     * O-Type pipe consisting of multiple segments (also O-Type pipes)
@@ -132,7 +183,6 @@ class segmentedOType: public multiElement
     };
 
 };
-
 
 /**
  * \brief
@@ -357,7 +407,6 @@ class restrictedPipe: public multiElement
 
 };
 
-
 /**
  * \brief
  * similar to restricted pipe but downstream pipe section is divided into two
@@ -403,6 +452,7 @@ class pig: public restrictedPipe
           std::string name = "restrictedPipe"
       );
 };
+
 
 }//end namespace pipe
 

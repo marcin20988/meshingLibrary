@@ -5,6 +5,60 @@ namespace meshing
 namespace pipe
 {
 
+oTypeExpanding::oTypeExpanding
+(
+    double length,
+    double radius,
+    double radius2,
+    double initialZ,
+    double squareSize, //relative to the pipe radius!
+    double squareRadius, //relative to the pipe radius
+    rounding,
+    std::string name
+):
+    multiElement(5, name)
+{
+    double r = 2.0 / sqrt(2.0) * squareRadius * radius;
+    double a = 2.0 / sqrt(2.0) * squareSize * radius;
+
+    double r2 = 2.0 / sqrt(2.0) * squareRadius * radius2;
+    double a2 = 2.0 / sqrt(2.0) * squareSize * radius2;
+
+    elements_[0] = 
+        new expandingCylinder
+        (
+            point( -a / 2.0 , -a / 2.0 , initialZ ),
+            a,
+            r,
+            a2,
+            r2,
+            length
+        );
+
+    for(int i = 0; i < 4; i++){
+        float alpha1 = (i + 0.5) * 2.0 * M_PI / 4.0;
+        float alpha2 = (i + 1.5) * 2.0 * M_PI / 4.0;
+        elements_[i+1] = 
+            new expandingCylinder
+            (
+                sqrt(2) * 0.5 * a,
+                radius,
+                sqrt(2) * 0.5 * a2,
+                radius2,
+                alpha1,
+                alpha2,
+                initialZ,
+                length
+            );
+        //elements_[i+1] = new element;
+    }
+
+
+};
+
+
+
+
 oType::oType
 (
     double length,
@@ -319,6 +373,8 @@ pig::pig
             "ring2" 
         );
 }
+
+
 
 };//end namespace pipe
 }//end namespace meshing
