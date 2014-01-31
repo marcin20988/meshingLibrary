@@ -25,7 +25,14 @@ it is pure C++ code.
 
 ## Documentation
 
-TODO: create a targed in cmake for documentation
+Documentation is generated automatically with Doxygen. To create documentation, 
+assuming the project is already build (see Main Code):
+```bash
+cd /path/to/source
+cd build
+make doc
+```
+Documentation is created in: /path/to/source/doxygen.
 
 # Usage examples
 
