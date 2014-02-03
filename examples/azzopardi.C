@@ -8,14 +8,14 @@ using namespace meshing;
 int main(){
 
     //pipe radius
-    double R = 0.063;
+    double R = 0.063 / 2.0;
     //pipe length
     double L = 4.5;
     //particle injection ring inner radius
-    double injectionR = 0.9 * 0.063;
+    double injectionR = 0.778 * R;
 
     //number of cells in z direction
-    int nZ = 100;
+    int nZ = 200;
     //in theta direction
     int nTheta = 36;
     //in r direction for central seciton
