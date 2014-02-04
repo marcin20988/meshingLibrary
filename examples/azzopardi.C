@@ -16,6 +16,7 @@ int main(){
 
     //number of cells in z direction
     int nZ = 200;
+
     //in theta direction
     int nTheta = 36;
     //in r direction for central seciton
