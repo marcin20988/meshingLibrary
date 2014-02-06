@@ -12,10 +12,11 @@ int main(){
     //pipe length
     double L = 4.5;
     //particle injection ring inner radius
-    double injectionR = 0.778 * R;
+    double injectionR = 0.93968 * R;
 
     //number of cells in z direction
-    int nZ = 200;
+    int nZ = 250;
+    double zGrad = 3;
 
     //in theta direction
     int nTheta = 36;
@@ -23,6 +24,15 @@ int main(){
     int nR1 = 12;
     //in r direction for ring seciton
     int nR2 = 5;
+
+    double S1 = M_PI * pow(injectionR,2); 
+    double Stotal = M_PI * pow(R,2); 
+    double S2 = Stotal - S1; 
+    std::cout << "oil inlet section surface: " << S1 << std::endl;
+    std::cout << "water inlet section surface: " << S2 << std::endl;
+    std::cout << "fraction: " << std::endl;
+    std::cout << "S1: " << S1 / Stotal << std::endl;
+    std::cout << "S1: " << S2 / Stotal << std::endl << std::endl;
 
     pipe::oType centralSection
         (
@@ -45,6 +55,9 @@ int main(){
 
     centralSection.nCell(nR1, nTheta, nZ);
     ringSection.nCell(nR2, nTheta , nZ);
+
+    centralSection.nGrading(1.0, 1.0, zGrad);
+    ringSection.nGrading(1.0, 1.0, zGrad);
 
     mesh M;
     M.addElement(centralSection);
