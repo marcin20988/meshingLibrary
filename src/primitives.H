@@ -69,7 +69,6 @@ class point
 class face
 {
  protected:
- protected:
   int label1_;
   int label2_;
   int label3_;
